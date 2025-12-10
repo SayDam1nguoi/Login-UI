@@ -27,5 +27,3 @@ Sau đó mở trình duyệt và truy cập: http://localhost:3000
   - Tháng 2: 28 hoặc 29 ngày (năm nhuận)
   - Tháng 4, 6, 9, 11: 30 ngày
   - Các tháng còn lại: 31 ngày
-  
-- **Lưu dữ liệu**: Thông tin đăng ký được lưu vào file `users.txt`
