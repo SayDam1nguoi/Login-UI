@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh sách người dùng</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .refresh-btn {
+            display: block;
+            margin: 0 auto 20px;
+            padding: 12px 30px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+
+        .refresh-btn:hover {
+            background: #45a049;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background: #667eea;
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background: #f5f5f5;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+            font-size: 18px;
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #667eea;
+            font-size: 18px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <a href="index.html" class="back-link">← Quay lại trang đăng ký</a>
+        <h1>📋 Danh sách người dùng đã đăng ký</h1>
+
+        <button class="refresh-btn" onclick="loadUsers()">🔄 Làm mới</button>
+
+        <div id="error" class="error" style="display: none;"></div>
+        <div id="loading" class="loading">Đang tải dữ liệu...</div>
+
+        <div id="tableContainer"></div>
+    </div>
+
+    <script>
+        async function loadUsers() {
+            const errorDiv = document.getElementById('error');
+            const loadingDiv = document.getElementById('loading');
+            const tableContainer = document.getElementById('tableContainer');
+
+            errorDiv.style.display = 'none';
+            loadingDiv.style.display = 'block';
+            tableContainer.innerHTML = '';
+
+            try {
+                const response = await fetch('/users');
+
+                if (!response.ok) {
+                    throw new Error('Không thể tải dữ liệu');
+                }
+
+                const users = await response.json();
+                loadingDiv.style.display = 'none';
+
+                if (users.length === 0) {
+                    tableContainer.innerHTML = '<div class="no-data">Chưa có người dùng nào đăng ký</div>';
+                    return;
+                }
+
+                let tableHTML = `
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Họ tên</th>
+                                <th>Tên đăng nhập</th>
+                                <th>Ngày sinh</th>
+                                <th>Địa chỉ</th>
+                                <th>Thời gian đăng ký</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+
+                users.forEach(user => {
+                    tableHTML += `
+                        <tr>
+                            <td>${user.id}</td>
+                            <td>${user.full_name}</td>
+                            <td>${user.username}</td>
+                            <td>${user.birth_date}</td>
+                            <td>${user.address}</td>
+                            <td>${user.registered_at}</td>
+                        </tr>
+                    `;
+                });
+
+                tableHTML += `
+                        </tbody>
+                    </table>
+                `;
+
+                tableContainer.innerHTML = tableHTML;
+
+            } catch (error) {
+                loadingDiv.style.display = 'none';
+                errorDiv.textContent = 'Lỗi: ' + error.message + '. Vui lòng kiểm tra server đã chạy chưa.';
+                errorDiv.style.display = 'block';
+            }
+        }
+
+        // Tự động load khi trang được mở
+        loadUsers();
+
+        // Tự động refresh mỗi 30 giây
+        setInterval(loadUsers, 30000);
+    </script>
+</body>
+
+</html>
