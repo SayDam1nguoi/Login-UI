@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng ký tài khoản</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Đăng ký tài khoản</h1>
+        <form id="registerForm">
+            <div class="form-group">
+                <label for="fullName">Họ tên:</label>
+                <input type="text" id="fullName" name="fullName" required>
+            </div>
+
+            <div class="form-group">
+                <label for="username">Tên đăng nhập:</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+
+            <div class="form-group">
+                <label>Ngày sinh:</label>
+                <div class="date-group">
+                    <input type="number" id="day" name="day" placeholder="Ngày" min="1" max="31" readonly>
+                    <input type="number" id="month" name="month" placeholder="Tháng" min="1" max="12" readonly>
+                    <input type="number" id="year" name="year" placeholder="Năm" min="1950" max="2010" readonly>
+                    <button type="button" id="randomDateBtn" class="random-btn">🎲 Ngẫu nhiên</button>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Mật khẩu:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+
+            <div class="form-group">
+                <label for="address">Địa chỉ:</label>
+                <textarea id="address" name="address" rows="3" required></textarea>
+            </div>
+
+            <button type="submit" class="submit-btn">Đăng ký</button>
+        </form>
+
+        <div id="message" class="message"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
